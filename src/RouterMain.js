@@ -1,8 +1,15 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Menu from './components/Menu';
-import { Home, About, Food, Photo } from './pages'  // pages 폴더명만 써도 그안의 index.js가 자동 import 된다.
+import { Home, About, Food } from './pages'  // pages 폴더명만 써도 그안의 index.js가 자동 import 된다.
 import imgFail from './image/catmouse.gif';
+import MyPhotoList from './myphoto/MyPhotoList'
+import MyPhotoWriteForm from './myphoto/MyPhotoWriteForm'
+import MyPhotoDetail from './myphoto/MyPhotoDetail'
+import MyPhotoUpdateForm from './myphoto/MyPhotoUpdateForm'
+import FoodDetail from './food/FoodDetail';
+import FoodForm from './food/FoodForm';
+import FoodList from './food/FoodList';
 
 function RouterMain(props) {
     return (
@@ -14,15 +21,29 @@ function RouterMain(props) {
                 <Route path='/' element={<Home />} />
                 {/* <Route path='/about/:emp' element={<About />} /> */}
 
-                <Route path={'/photo/list/:num'} element={<Photo />}>
-                    {/* <Route path={':emp'} element={<Photo />} /> */}
+                {/* <Route path={'/photo/list/:num'} element={<MyPhotoList />} />
+                <Route path='/photo/write' element={<MyPhotoWriteForm />} />
+                <Route path='/photo/detail/:num' element={<MyPhotoDetail />} /> */}
+
+                <Route path={'/photo/'}>
+                    <Route path={'list/:num'} element={<MyPhotoList />} />
+                    <Route path={'write'} element={<MyPhotoWriteForm />} />
+                    <Route path={'update/:num'} element={<MyPhotoUpdateForm />} />
+                    <Route path={'detail/:num'} element={<MyPhotoDetail />} />
                 </Route>
+
+                {/* Food 매핑 등록 */}
+                <Route path={'/food/'}>
+                    <Route path={'list/:num'} element={<FoodList />} />
+                    <Route path={'addform'} element={<FoodForm />} />
+                    <Route path={'detail/:num'} element={<FoodDetail />} />
+                </Route>
+
+
 
                 <Route path={'/about/'} element={<About />}>
                     <Route path={':emp'} element={<About />} />
                 </Route>
-                <Route path='/food' element={<Food />} />
-                <Route path='/food/:food1/:food2' element={<Food />} />
                 {/* 아래는 테스트후 주석처리 */}
                 <Route path='/login/*' element={
                     <div>

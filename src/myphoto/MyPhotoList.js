@@ -4,9 +4,15 @@ import React, { useEffect, useState } from 'react';
 import { ImageList } from '@material-ui/core';
 import ImageListItem from '@material-ui/core/ImageListItem';
 import { DeleteForeverOutlined, CloseOutlined } from '@material-ui/icons';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
-function Photo(props) {
+function MyPhotoList(props) {
+
+    const navi = useNavigate();
+    const { num } = useParams();
+    console.log({ num });
+
+    const COMMON_URL = process.env.REACT_APP_BACK_URL;
 
     // 배열 타입으로 선언(여러개 받는다.)
     let [photolist, setPhotolist] = useState([]);
@@ -15,7 +21,8 @@ function Photo(props) {
     const list = () => {
         console.log("list 호출");
 
-        let listUrl = "http://localhost:9003/myphoto/list";
+        // let listUrl = "http://localhost:9003/myphoto/list";
+        let listUrl = COMMON_URL + "/myphoto/list";
         axios.get(listUrl)
             .then(res => {
                 setPhotolist(res.data);
@@ -31,7 +38,8 @@ function Photo(props) {
 
     // 저장 함수 (title과 photo 변수)
     const onSave = ({ title, photo }) => {
-        let insertUrl = "http://localhost:9003/myphoto/insert"
+        // let insertUrl = "http://localhost:9003/myphoto/insert"
+        let insertUrl = COMMON_URL + "/myphoto/insert";
         axios.post(insertUrl, { title, photo })
             // 저장하는 함수라 return 값 없음
             .then((res) => {
@@ -45,7 +53,8 @@ function Photo(props) {
     const deletePhoto = (num) => {
         console.log(num);
         // 쿼리스트링으로 url 자체에 num 넘기기
-        let deleteUrl = "http://localhost:9003/myphoto/delete?num=" + num;
+        // let deleteUrl = "http://localhost:9003/myphoto/delete?num=" + num;
+        let deleteUrl = COMMON_URL + "/myphoto/delete?num=" + num;
         axios.delete(deleteUrl)
             .then(res => {
                 list(); // 삭제후 목록 다시 가져와 출력하기
@@ -53,18 +62,14 @@ function Photo(props) {
     }
 
 
-    let imageUrl = "http://localhost:9003/image/";
+    // let imageUrl = "http://localhost:9003/image/";
+    let imageUrl = COMMON_URL + "/image/";
 
-    const { num } = useParams();
 
     return (
         <div>
-            <Alert severity="info">
-                <b style={{ fontSize: '20px' }}>axios 라이브러리 공부하기-MyPhoto</b>
-            </Alert>
-            <br />
-            {/* 자식컴포넌트에 값 전달은 안한다. */}
-            <hr />
+            <button type='button' className='btn btn-success'
+                onClick={() => navi("/photo/write")}>사진등록</button>
             {
                 Number(num) === 1 ?
 
@@ -84,7 +89,9 @@ function Photo(props) {
                                     <tr key={idx}>
                                         <td>{idx + 1}</td>
                                         <td>
-                                            <img src={imageUrl + item.photo} height={120} />
+                                            <img src={imageUrl + item.photo} height={120}
+                                                style={{ cursor: 'pointer' }}
+                                                onClick={() => navi(`/photo/detail/${item.num}`)} />
                                         </td>
                                         <td>{item.title}</td>
                                         <td>{item.writeday}</td>
@@ -109,7 +116,8 @@ function Photo(props) {
                                     <img
                                         src={imageUrl + item.photo}
                                         alt={item.title}
-                                        style={{ height: 200, width: 200 }}
+                                        style={{ height: 200, width: 200, cursor: 'pointer' }}
+                                        onClick={() => navi(`/photo/detail/${item.num}`)}
                                     />
                                     <span style={{ color: 'gray', cursor: 'pointer' }}
                                         onClick={() => {
@@ -131,4 +139,4 @@ function Photo(props) {
     );
 }
 
-export default Photo;
+export default MyPhotoList;

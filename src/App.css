@@ -32,3 +32,12 @@ ul.menu li:hover {
 ul.menu li a:hover {
   /* color: aliceblue; */
 }
+
+img.foodphoto {
+  width: 100px;
+  height: 100px;
+  border: 2px solid gray;
+  border-radius: 30px;
+  box-shadow: 3px 3px 3px #ddd;
+  margin-right: 10px;
+}
